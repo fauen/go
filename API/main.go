@@ -2,26 +2,29 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"log"
+	"io/ioutil"
 	"net/http"
-	"os"
 )
 
 func main() {
-	fmt.Println("Testing API calls")
+	url := "https://wttr.in/stockholm"
 
-	weatherResponse, weatherError := http.Get("https://wttr.in/Stockholm?T")
-
-	if weatherError != nil {
-		fmt.Println(weatherError.Error())
-		os.Exit(1)
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Print(err.Error())
 	}
 
-	weatherResponseData, weatherError := io.ReadAll(weatherResponse.Body)
-	if weatherError != nil {
-		log.Fatal(weatherError)
+	// req.Header.Add("content-type", "application/json")
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		fmt.Print(err.Error())
 	}
 
-	fmt.Println(string(weatherResponseData))
+	defer res.Body.Close()
+	body, readErr := ioutil.ReadAll(res.Body)
+	if readErr != nil {
+		fmt.Print(err.Error())
+	}
+	fmt.Println(string(body))
 }
