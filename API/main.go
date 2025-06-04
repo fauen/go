@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	url := "https://wttr.in/stockholm"
+	url := "https://wttr.in/stockholm?T&F"
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
